@@ -10,6 +10,9 @@ export default interface ComputeUsage extends IUsageData {
   cpuUtilizationAverage: number
   numberOfvCpus: number
   usesAverageCPUConstant: boolean
+  minWatts?: number
+  maxWatts?: number
+  powerUsageEffectiveness?: number
 }
 
 export class ComputeUsageBuilder {

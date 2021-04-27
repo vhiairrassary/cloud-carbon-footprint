@@ -6,7 +6,7 @@ import {
   ApplicationTokenCredentials,
   loginWithServicePrincipalSecret,
 } from '@azure/ms-rest-nodeauth'
-import config from './ConfigLoader'
+import { configLoader as config } from '@cloud-carbon-footprint/core'
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager'
 
 export default class AzureCredentialsProvider {

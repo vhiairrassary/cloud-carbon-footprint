@@ -2,11 +2,11 @@
  * © 2021 ThoughtWorks, Inc.
  */
 
+import moment from 'moment'
 import App from '../App'
 import UsageData from '../../domain/IUsageData'
 import FootprintEstimate from '../../domain/FootprintEstimate'
 import { EstimationResult } from '../EstimationResult'
-import moment = require('moment')
 import ICloudService from '../../domain/ICloudService'
 import Cost from '../../domain/Cost'
 import cache from '../Cache'
@@ -389,6 +389,11 @@ describe('App', () => {
             region: testRegions[0],
             usesAverageCPUConstant: false,
           },
+        ],
+      },
+      {
+        timestamp: new Date(startDate),
+        serviceEstimates: [
           {
             cloudProvider: 'AWS',
             accountName: testAwsAccountName,
@@ -504,6 +509,11 @@ describe('App', () => {
             region: testRegions[0],
             usesAverageCPUConstant: false,
           },
+        ],
+      },
+      {
+        timestamp: new Date(startDate),
+        serviceEstimates: [
           {
             cloudProvider: 'AWS',
             accountName: testAwsAccountName,
@@ -608,6 +618,11 @@ describe('App', () => {
             region: 'us-east-1',
             usesAverageCPUConstant: false,
           },
+        ],
+      },
+      {
+        timestamp: new Date(startDate),
+        serviceEstimates: [
           {
             cloudProvider: 'AWS',
             accountName: testAwsAccountName,
@@ -618,6 +633,11 @@ describe('App', () => {
             region: 'us-east-2',
             usesAverageCPUConstant: false,
           },
+        ],
+      },
+      {
+        timestamp: new Date(startDate),
+        serviceEstimates: [
           {
             cloudProvider: 'GCP',
             accountName: testGcpAccountName,
@@ -628,6 +648,11 @@ describe('App', () => {
             region: 'us-east1',
             usesAverageCPUConstant: false,
           },
+        ],
+      },
+      {
+        timestamp: new Date(startDate),
+        serviceEstimates: [
           {
             cloudProvider: 'GCP',
             accountName: testGcpAccountName,
@@ -638,6 +663,11 @@ describe('App', () => {
             region: 'us-west1',
             usesAverageCPUConstant: false,
           },
+        ],
+      },
+      {
+        timestamp: new Date(startDate),
+        serviceEstimates: [
           {
             cloudProvider: 'GCP',
             accountName: testGcpAccountName,
@@ -648,6 +678,11 @@ describe('App', () => {
             region: 'us-central1',
             usesAverageCPUConstant: false,
           },
+        ],
+      },
+      {
+        timestamp: new Date(startDate),
+        serviceEstimates: [
           {
             accountName: 'test GCP account 2',
             cloudProvider: 'GCP',
@@ -658,6 +693,11 @@ describe('App', () => {
             usesAverageCPUConstant: false,
             kilowattHours: 4,
           },
+        ],
+      },
+      {
+        timestamp: new Date(startDate),
+        serviceEstimates: [
           {
             accountName: 'test GCP account 2',
             cloudProvider: 'GCP',
@@ -668,6 +708,11 @@ describe('App', () => {
             usesAverageCPUConstant: false,
             kilowattHours: 4,
           },
+        ],
+      },
+      {
+        timestamp: new Date(startDate),
+        serviceEstimates: [
           {
             accountName: 'test GCP account 2',
             cloudProvider: 'GCP',

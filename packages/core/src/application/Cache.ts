@@ -138,7 +138,7 @@ export default function cache(): any {
       // write missing estimates to cache
       const estimatesToPersist = fillDates(missingDates, estimates)
       cacheLogger.info('Setting new estimates to cache file...')
-      await cacheManager.setEstimates(estimatesToPersist)
+      cacheManager.setEstimates(estimatesToPersist)
 
       // so we don't return results with no estimates
       const filteredCachedEstimates = cachedEstimates.filter(

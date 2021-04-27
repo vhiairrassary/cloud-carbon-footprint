@@ -5,23 +5,26 @@
 import { ServiceClientCredentials } from '@azure/ms-rest-js'
 import { ConsumptionManagementClient } from '@azure/arm-consumption'
 
-import ComputeEstimator from '../../../domain/ComputeEstimator'
-import { StorageEstimator } from '../../../domain/StorageEstimator'
-import { CLOUD_CONSTANTS } from '../../../domain/FootprintEstimationConstants'
-import NetworkingEstimator from '../../../domain/NetworkingEstimator'
-import ConsumptionManagementService from '../ConsumptionManagement'
+import {
+  ComputeEstimator,
+  StorageEstimator,
+  NetworkingEstimator,
+  CLOUD_CONSTANTS,
+  EstimationResult,
+  configLoader as config,
+} from '@cloud-carbon-footprint/core'
+
 import {
   mockConsumptionManagementResponseFour,
   mockConsumptionManagementResponseOne,
   mockConsumptionManagementResponseThree,
   mockConsumptionManagementResponseTwo,
-} from '../../../../test/fixtures/consumptionManagement.fixtures'
-import { EstimationResult } from '../../../application'
-import config from '../../../application/ConfigLoader'
+} from '../../test/fixtures/consumptionManagement.fixtures'
+import ConsumptionManagementService from '../lib/ConsumptionManagement'
 
 const mockUsageDetails = { list: jest.fn(), listNext: jest.fn() }
 
-jest.mock('../../../application/ConfigLoader')
+jest.mock('@cloud-carbon-footprint/core')
 
 jest.mock('@azure/arm-consumption', () => {
   return {
@@ -41,7 +44,7 @@ describe('Azure Consumption Management Service', () => {
 
   beforeEach(() => {
     ;(config as jest.Mock).mockReturnValue({
-      GROUP_QUERY_RESULTS_BY_WEEK: false,
+      GROUP_QUERY_RESULTS_BY: 'day',
     })
   })
 
@@ -49,7 +52,7 @@ describe('Azure Consumption Management Service', () => {
     jest.restoreAllMocks()
   })
 
-  it('Returns estimates for Compute', async () => {
+  it.only('Returns estimates for Compute', async () => {
     mockUsageDetails.list.mockResolvedValue(
       mockConsumptionManagementResponseOne,
     )

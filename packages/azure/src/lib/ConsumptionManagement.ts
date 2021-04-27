@@ -7,16 +7,26 @@ import {
   UsageDetailsListResult,
 } from '@azure/arm-consumption/esm/models'
 import { ConsumptionManagementClient } from '@azure/arm-consumption'
-import ComputeEstimator from '../../domain/ComputeEstimator'
-import { StorageEstimator } from '../../domain/StorageEstimator'
-import NetworkingEstimator from '../../domain/NetworkingEstimator'
-import { EstimationResult } from '../../application'
-import ComputeUsage from '../../domain/ComputeUsage'
-import { CLOUD_CONSTANTS } from '../../domain/FootprintEstimationConstants'
-import FootprintEstimate, {
+
+import {
+  ComputeEstimator,
+  StorageEstimator,
+  NetworkingEstimator,
+  EstimationResult,
+  ComputeUsage,
+  FootprintEstimate,
   appendOrAccumulateEstimatesByDay,
   MutableEstimationResult,
-} from '../../domain/FootprintEstimate'
+  StorageUsage,
+  NetworkingUsage,
+  Logger,
+  configLoader,
+} from '@cloud-carbon-footprint/core'
+
+import {
+  CLOUD_CONSTANTS,
+  AZURE_EMISSIONS_FACTORS_METRIC_TON_PER_KWH,
+} from '../application/FootprintEstimationConstants'
 import ConsumptionDetailRow from './ConsumptionDetailRow'
 import { INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING } from './VirtualMachineTypes'
 import {
@@ -32,10 +42,6 @@ import {
   UNSUPPORTED_USAGE_TYPES,
   AZURE_QUERY_GROUP_BY,
 } from './ConsumptionTypes'
-import StorageUsage from '../../domain/StorageUsage'
-import NetworkingUsage from '../../domain/NetworkingUsage'
-import Logger from '../Logger'
-import configLoader from '../../application/ConfigLoader'
 
 type TenantHeaders = {
   [key: string]: string
@@ -174,26 +180,34 @@ export default class ConsumptionManagementService {
   private getEstimateByPricingUnit(
     consumptionDetailRow: ConsumptionDetailRow,
   ): FootprintEstimate {
+    const emissionsFactors = this.getEmissionsFactors()
+    const powerUsageEffectiveness = this.getPowerUsageEffectiveness(
+      consumptionDetailRow.region,
+    )
     switch (consumptionDetailRow.usageUnit) {
       case COMPUTE_USAGE_UNITS.HOUR_1:
       case COMPUTE_USAGE_UNITS.HOURS_10:
       case COMPUTE_USAGE_UNITS.HOURS_100:
       case COMPUTE_USAGE_UNITS.HOURS_1000:
-        const computeUsage: ComputeUsage = {
-          cpuUtilizationAverage: CLOUD_CONSTANTS.AZURE.AVG_CPU_UTILIZATION_2020,
-          numberOfvCpus: consumptionDetailRow.vCpuHours,
-          usesAverageCPUConstant: true,
-          timestamp: consumptionDetailRow.timestamp,
-        }
         const computeProcessors = this.getComputeProcessorsFromUsageType(
           consumptionDetailRow.usageType,
         )
+        const computeUsage: ComputeUsage = {
+          cpuUtilizationAverage: this.getCpuUtilizationAverage(),
+          numberOfvCpus: consumptionDetailRow.vCpuHours,
+          usesAverageCPUConstant: true,
+          minWatts: this.getMinwatts(computeProcessors),
+          maxWatts: this.getMaxwatts(computeProcessors),
+          powerUsageEffectiveness: powerUsageEffectiveness,
+          timestamp: consumptionDetailRow.timestamp,
+        }
 
         return this.computeEstimator.estimate(
           [computeUsage],
           consumptionDetailRow.region,
           'AZURE',
           computeProcessors,
+          emissionsFactors,
         )[0]
       case STORAGE_USAGE_UNITS.MONTH_1:
       case STORAGE_USAGE_UNITS.MONTH_100:
@@ -207,6 +221,7 @@ export default class ConsumptionManagementService {
         const storageUsage: StorageUsage = {
           timestamp: consumptionDetailRow.timestamp,
           terabyteHours: usageAmountTerabyteHours,
+          powerUsageEffectiveness: powerUsageEffectiveness,
         }
         let estimate: FootprintEstimate
         if (this.isSSDStorage(consumptionDetailRow)) {
@@ -214,12 +229,14 @@ export default class ConsumptionManagementService {
             [storageUsage],
             consumptionDetailRow.region,
             'AZURE',
+            emissionsFactors,
           )[0]
         } else if (this.isHDDStorage(consumptionDetailRow)) {
           estimate = this.hddStorageEstimator.estimate(
             [storageUsage],
             consumptionDetailRow.region,
             'AZURE',
+            emissionsFactors,
           )[0]
         } else {
           this.consumptionManagementLogger.warn(
@@ -237,12 +254,15 @@ export default class ConsumptionManagementService {
           const networkingUsage: NetworkingUsage = {
             timestamp: consumptionDetailRow.timestamp,
             gigabytes: this.getGigabytesForNetworking(consumptionDetailRow),
+            powerUsageEffectiveness: powerUsageEffectiveness,
+            networkingCoefficient: this.getNetworkingCoefficient(),
           }
 
           const networkingEstimate = this.networkingEstimator.estimate(
             [networkingUsage],
             consumptionDetailRow.region,
             'AZURE',
+            emissionsFactors,
           )[0]
           if (networkingEstimate)
             networkingEstimate.usesAverageCPUConstant = false
@@ -393,6 +413,37 @@ export default class ConsumptionManagementService {
   }
 
   private getComputeProcessorsFromUsageType(usageType: string): string[] {
+    const processors = INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING[usageType]
+    if (!processors) {
+      this.consumptionManagementLogger.warn(
+        `Error: No processors found for UsageType: ${usageType}`,
+      )
+      return []
+    }
     return INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING[usageType]
+  }
+
+  private getMinwatts(computeProcessors: string[]): number {
+    return CLOUD_CONSTANTS.getMinWatts(computeProcessors)
+  }
+
+  private getMaxwatts(computeProcessors: string[]): number {
+    return CLOUD_CONSTANTS.getMaxWatts(computeProcessors)
+  }
+
+  private getPowerUsageEffectiveness(region: string): number {
+    return CLOUD_CONSTANTS.getPUE(region)
+  }
+
+  private getNetworkingCoefficient(): number {
+    return CLOUD_CONSTANTS.NETWORKING_COEFFICIENT
+  }
+
+  private getCpuUtilizationAverage(): number {
+    return CLOUD_CONSTANTS.AVG_CPU_UTILIZATION_2020
+  }
+
+  private getEmissionsFactors(): { [region: string]: number } {
+    return AZURE_EMISSIONS_FACTORS_METRIC_TON_PER_KWH
   }
 }

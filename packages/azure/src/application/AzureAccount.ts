@@ -10,14 +10,16 @@ import {
 import { ApplicationTokenCredentials } from '@azure/ms-rest-nodeauth'
 import { ConsumptionManagementClient } from '@azure/arm-consumption'
 
-import CloudProviderAccount from './CloudProviderAccount'
+import {
+  CloudProviderAccount,
+  EstimationResult,
+  ComputeEstimator,
+  StorageEstimator,
+  NetworkingEstimator,
+  CLOUD_CONSTANTS,
+} from '@cloud-carbon-footprint/core'
 import AzureCredentialsProvider from './AzureCredentialsProvider'
-import { EstimationResult } from './EstimationResult'
-import ConsumptionManagementService from '../services/azure/ConsumptionManagement'
-import ComputeEstimator from '../domain/ComputeEstimator'
-import { StorageEstimator } from '../domain/StorageEstimator'
-import { CLOUD_CONSTANTS } from '../domain/FootprintEstimationConstants'
-import NetworkingEstimator from '../domain/NetworkingEstimator'
+import ConsumptionManagementService from '../lib/ConsumptionManagement'
 
 export default class AzureAccount extends CloudProviderAccount {
   private credentials: ApplicationTokenCredentials | ServiceClientCredentials
@@ -42,7 +44,7 @@ export default class AzureAccount extends CloudProviderAccount {
   ): Promise<EstimationResult[]> {
     const subscriptions = await this.subscriptionClient.subscriptions.list()
 
-    const estimationResults = await Promise.all(
+    const estimationResults: EstimationResult[][] = await Promise.all(
       subscriptions.map(
         async (subscription: SubscriptionModels.Subscription) => {
           const consumptionManagementService = new ConsumptionManagementService(

@@ -2,7 +2,7 @@
  * © 2021 ThoughtWorks, Inc.
  */
 
-import { QUERY_DATE_TYPES } from '../common/types'
+import { QUERY_DATE_TYPES } from '@cloud-carbon-footprint/core'
 
 export const UNSUPPORTED_SERVICES = [
   'Virtual Machines Licenses',

@@ -5,10 +5,9 @@ import { median } from 'ramda'
 
 import { AWS_REGIONS } from '../services/aws/AWSRegions'
 import { GCP_REGIONS } from '../services/gcp/GCPRegions'
-import { AZURE_REGIONS } from '../services/azure/AzureRegions'
 import { COMPUTE_PROCESSOR_TYPES } from './ComputeProcessorTypes'
 
-type CloudConstantsByProvider = {
+export type CloudConstantsByProvider = {
   SSDCOEFFICIENT: number
   HDDCOEFFICIENT: number
   MIN_WATTS_AVG?: number
@@ -26,7 +25,7 @@ type CloudConstantsByProvider = {
   AVG_CPU_UTILIZATION_2020: number
 }
 
-type CloudConstants = {
+export type CloudConstants = {
   [cloudProvider: string]: CloudConstantsByProvider
 }
 
@@ -174,71 +173,11 @@ export const CLOUD_CONSTANTS: CloudConstants = {
     },
     AVG_CPU_UTILIZATION_2020: 50,
   },
-  AZURE: {
-    SSDCOEFFICIENT: 1.2, // watt hours / terabyte hour
-    HDDCOEFFICIENT: 0.65, // watt hours / terabyte hour
-    MIN_WATTS_AVG: 0.77,
-    MIN_WATTS_BY_COMPUTE_PROCESSOR: {
-      [COMPUTE_PROCESSOR_TYPES.CASCADE_LAKE]: 0.62,
-      [COMPUTE_PROCESSOR_TYPES.SKYLAKE]: 0.64,
-      [COMPUTE_PROCESSOR_TYPES.BROADWELL]: 0.71,
-      [COMPUTE_PROCESSOR_TYPES.HASWELL]: 1,
-      [COMPUTE_PROCESSOR_TYPES.COFFEE_LAKE]: 1.14,
-      [COMPUTE_PROCESSOR_TYPES.SANDY_BRIDGE]: 2.17,
-      [COMPUTE_PROCESSOR_TYPES.IVY_BRIDGE]: 3.04,
-      [COMPUTE_PROCESSOR_TYPES.AMD_EPYC_1ST_GEN]: 0.82,
-      [COMPUTE_PROCESSOR_TYPES.AMD_EPYC_2ND_GEN]: 0.47,
-    },
-    getMinWatts: (computeProcessors: string[]): number => {
-      const minWattsForProcessors: number[] = computeProcessors.map(
-        (processor: string) => {
-          return CLOUD_CONSTANTS.AZURE.MIN_WATTS_BY_COMPUTE_PROCESSOR[processor]
-        },
-      )
-      const averageWattsForProcessors = getWattsByAverageOrMedian(
-        computeProcessors,
-        minWattsForProcessors,
-      )
-      return averageWattsForProcessors
-        ? averageWattsForProcessors
-        : CLOUD_CONSTANTS.AZURE.MIN_WATTS_AVG
-    },
-    MAX_WATTS_AVG: 3.74,
-    MAX_WATTS_BY_COMPUTE_PROCESSOR: {
-      [COMPUTE_PROCESSOR_TYPES.CASCADE_LAKE]: 3.94,
-      [COMPUTE_PROCESSOR_TYPES.SKYLAKE]: 4.15,
-      [COMPUTE_PROCESSOR_TYPES.BROADWELL]: 3.68,
-      [COMPUTE_PROCESSOR_TYPES.HASWELL]: 4.74,
-      [COMPUTE_PROCESSOR_TYPES.COFFEE_LAKE]: 5.42,
-      [COMPUTE_PROCESSOR_TYPES.SANDY_BRIDGE]: 8.58,
-      [COMPUTE_PROCESSOR_TYPES.IVY_BRIDGE]: 8.25,
-      [COMPUTE_PROCESSOR_TYPES.AMD_EPYC_1ST_GEN]: 2.55,
-      [COMPUTE_PROCESSOR_TYPES.AMD_EPYC_2ND_GEN]: 1.69,
-    },
-    getMaxWatts: (computeProcessors: string[]): number => {
-      const maxWattsForProcessors: number[] = computeProcessors.map(
-        (processor: string) => {
-          return CLOUD_CONSTANTS.AZURE.MAX_WATTS_BY_COMPUTE_PROCESSOR[processor]
-        },
-      )
-      const averageWattsForProcessors = getWattsByAverageOrMedian(
-        computeProcessors,
-        maxWattsForProcessors,
-      )
-      return averageWattsForProcessors
-        ? averageWattsForProcessors
-        : CLOUD_CONSTANTS.AZURE.MAX_WATTS_AVG
-    },
-    NETWORKING_COEFFICIENT: 0.001, // kWh / Gb
-    PUE_AVG: 1.185,
-    getPUE: (): number => {
-      return CLOUD_CONSTANTS.AZURE.PUE_AVG
-    },
-    AVG_CPU_UTILIZATION_2020: 50,
-  },
 }
 
-const US_NERC_REGIONS_EMISSIONS_FACTORS: { [nercRegion: string]: number } = {
+export const US_NERC_REGIONS_EMISSIONS_FACTORS: {
+  [nercRegion: string]: number
+} = {
   RFC: 0.000475105,
   SERC: 0.0004545,
   WECC: 0.000351533,
@@ -304,39 +243,16 @@ export const CLOUD_PROVIDER_EMISSIONS_FACTORS_METRIC_TON_PER_KWH: {
     [GCP_REGIONS.SOUTHAMERICA_EAST1]: 0.000109,
     [GCP_REGIONS.UNKNOWN]: 0.0004108907, // Average of the above regions
   },
-  AZURE: {
-    [AZURE_REGIONS.AP_EAST]: 0.00081,
-    [AZURE_REGIONS.AP_SOUTH_EAST]: 0.0004085,
-    [AZURE_REGIONS.ASIA]: 0.0005647,
-    [AZURE_REGIONS.EU_NORTH]: 0.000316,
-    [AZURE_REGIONS.EU_WEST]: 0.00039,
-    [AZURE_REGIONS.IN_CENTRAL]: 0.000708,
-    [AZURE_REGIONS.IN_SOUTH]: 0.000708,
-    [AZURE_REGIONS.IN_WEST]: 0.000708,
-    [AZURE_REGIONS.UK_SOUTH]: 0.000228,
-    [AZURE_REGIONS.UK_WEST]: 0.000228,
-    [AZURE_REGIONS.US_CENTRAL]: US_NERC_REGIONS_EMISSIONS_FACTORS.MRO,
-    [AZURE_REGIONS.US_EAST]: US_NERC_REGIONS_EMISSIONS_FACTORS.SERC,
-    [AZURE_REGIONS.US_EAST_2]: US_NERC_REGIONS_EMISSIONS_FACTORS.SERC,
-    [AZURE_REGIONS.US_EAST_3]: US_NERC_REGIONS_EMISSIONS_FACTORS.SERC,
-    [AZURE_REGIONS.US_NORTH_CENTRAL]: US_NERC_REGIONS_EMISSIONS_FACTORS.RFC,
-    [AZURE_REGIONS.US_SOUTH_CENTRAL]: US_NERC_REGIONS_EMISSIONS_FACTORS.TRE,
-    [AZURE_REGIONS.US_WEST_CENTRAL]: US_NERC_REGIONS_EMISSIONS_FACTORS.WECC,
-    [AZURE_REGIONS.US_WEST]: US_NERC_REGIONS_EMISSIONS_FACTORS.WECC,
-    [AZURE_REGIONS.US_WEST_2]: US_NERC_REGIONS_EMISSIONS_FACTORS.WECC,
-    [AZURE_REGIONS.US_WEST_3]: US_NERC_REGIONS_EMISSIONS_FACTORS.WECC,
-    [AZURE_REGIONS.UNKNOWN]: 0.0004074,
-  },
 }
 
 // When we have a group of compute processor types, by we default calculate the average for this group of processors.
 // However when the group contains either the Sandy Bridge or Ivy Bridge processor type, we calculate the median.
 // This is because those processor types are outliers with much higher min/max watts that the other types, so we
 // want to take this into account to not over estimate the compute energy in kilowatts.
-function getWattsByAverageOrMedian(
+export const getWattsByAverageOrMedian = (
   computeProcessors: string[],
   wattsForProcessors: number[],
-): number {
+): number => {
   if (
     computeProcessors.includes(COMPUTE_PROCESSOR_TYPES.SANDY_BRIDGE) ||
     computeProcessors.includes(COMPUTE_PROCESSOR_TYPES.IVY_BRIDGE)
@@ -355,9 +271,10 @@ export function estimateCo2(
   estimatedWattHours: number,
   cloudProvider: string,
   region: string,
+  emissionsFactors?: { [region: string]: number },
 ): number {
-  return (
-    estimatedWattHours *
-    CLOUD_PROVIDER_EMISSIONS_FACTORS_METRIC_TON_PER_KWH[cloudProvider][region]
-  )
+  const calculatedEmissionsFactors = emissionsFactors
+    ? emissionsFactors[region]
+    : CLOUD_PROVIDER_EMISSIONS_FACTORS_METRIC_TON_PER_KWH[cloudProvider][region]
+  return estimatedWattHours * calculatedEmissionsFactors
 }

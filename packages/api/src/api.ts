@@ -12,9 +12,16 @@ import {
   CLOUD_PROVIDER_EMISSIONS_FACTORS_METRIC_TON_PER_KWH,
   Logger,
   RawRequest,
+  reduceByTimestamp,
+  EstimationResult,
 } from '@cloud-carbon-footprint/core'
 
-export type EmissionsRatios = {
+import {
+  App as AzureApp,
+  AZURE_EMISSIONS_FACTORS_METRIC_TON_PER_KWH,
+} from '@cloud-carbon-footprint/azure'
+
+export type EmissionsFactors = {
   region: string
   mtPerKwHour: number
 }
@@ -42,14 +49,31 @@ const FootprintApiMiddleware = async function (
     `Footprint API request started with Start Date: ${rawRequest.startDate} and End Date: ${rawRequest.endDate}`,
   )
   const footprintApp = new App()
+  const azureFootprintApp = new AzureApp()
+  let estimationResults: EstimationResult[]
+  let azureEstimationResults: EstimationResult[]
+  let estimationRequest
   try {
-    const estimationRequest = CreateValidRequest(rawRequest)
-    const estimationResults = await footprintApp.getCostAndEstimates(
-      estimationRequest,
+    estimationRequest = CreateValidRequest(rawRequest)
+    try {
+      estimationResults = await footprintApp.getCostAndEstimates(
+        estimationRequest,
+      )
+    } catch {
+      apiLogger.warn(`Unable to process footprint request.`)
+    }
+    try {
+      azureEstimationResults = await azureFootprintApp.getAzureConsumptionManagementData(
+        estimationRequest,
+      )
+    } catch {
+      apiLogger.warn(`Unable to process azure footprint request.`)
+    }
+    res.json(
+      reduceByTimestamp(estimationResults.concat(azureEstimationResults)),
     )
-    res.json(estimationResults)
   } catch (e) {
-    apiLogger.error(`Unable to process footprint request.`, e)
+    apiLogger.error(`Unable to create valid footprint request.`, e)
     if (e instanceof EstimationRequestValidationError) {
       res.status(400).send(e.message)
     } else if (e instanceof PartialDataError) {
@@ -64,7 +88,7 @@ const EmissionsApiMiddleware = async function (
 ): Promise<void> {
   apiLogger.info(`Regions emissions factors API request started`)
   try {
-    const emissionsResults: EmissionsRatios[] = Object.values(
+    const emissionsResults: EmissionsFactors[] = Object.values(
       CLOUD_PROVIDER_EMISSIONS_FACTORS_METRIC_TON_PER_KWH,
     ).reduce((cloudProviderResult, cloudProvider) => {
       return Object.keys(cloudProvider).reduce((emissionDataResult, key) => {
@@ -75,11 +99,28 @@ const EmissionsApiMiddleware = async function (
         return emissionDataResult
       }, cloudProviderResult)
     }, [])
-    res.json(emissionsResults)
+
+    const azureEmissionsResults: EmissionsFactors[] = getCloudProviderEmissionsFactors(
+      AZURE_EMISSIONS_FACTORS_METRIC_TON_PER_KWH,
+    )
+
+    res.json(emissionsResults.concat(azureEmissionsResults))
   } catch (e) {
     apiLogger.error(`Unable to process regions emissions factors request.`, e)
     res.status(500).send('Internal Server Error')
   }
+}
+
+const getCloudProviderEmissionsFactors = (emissionsFactors: {
+  [region: string]: number
+}): EmissionsFactors[] => {
+  return Object.keys(emissionsFactors).reduce((emissionDataResult, key) => {
+    emissionDataResult.push({
+      region: key,
+      mtPerKwHour: emissionsFactors[key],
+    })
+    return emissionDataResult
+  }, [])
 }
 
 const router = express.Router()

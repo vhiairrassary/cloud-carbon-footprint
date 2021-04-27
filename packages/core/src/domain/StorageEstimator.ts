@@ -16,20 +16,27 @@ export class StorageEstimator implements IFootprintEstimator {
 
   estimate(
     data: StorageUsage[],
-    region: string,
-    cloudProvider: string,
+    region?: string,
+    cloudProvider?: string,
+    emissionsFactors?: { [region: string]: number },
   ): FootprintEstimate[] {
     return data.map((d: StorageUsage) => {
       const estimatedKilowattHours = this.estimateKilowattHours(
         d.terabyteHours,
         cloudProvider,
         region,
+        d.powerUsageEffectiveness,
       )
 
       return {
         timestamp: d.timestamp,
         kilowattHours: estimatedKilowattHours,
-        co2e: estimateCo2(estimatedKilowattHours, cloudProvider, region),
+        co2e: estimateCo2(
+          estimatedKilowattHours,
+          cloudProvider,
+          region,
+          emissionsFactors,
+        ),
       }
     })
   }
@@ -38,13 +45,15 @@ export class StorageEstimator implements IFootprintEstimator {
     terabyteHours: number,
     cloudProvider: string,
     region: string,
+    powerUsageEffectiveness: number,
   ) {
     // This function multiplies the usage in terabyte hours this by the SSD or HDD co-efficient,
     // then by PUE to account for extra power used by data center (lights, infrastructure, etc.), then converts to kilowatt-hours
+    const calculatedPowerUsageEffectiveness = powerUsageEffectiveness
+      ? powerUsageEffectiveness
+      : CLOUD_CONSTANTS[cloudProvider].getPUE(region)
     return (
-      (terabyteHours *
-        this.coefficient *
-        CLOUD_CONSTANTS[cloudProvider].getPUE(region)) /
+      (terabyteHours * this.coefficient * calculatedPowerUsageEffectiveness) /
       1000
     )
   }

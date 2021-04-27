@@ -3,12 +3,12 @@
  */
 
 import {
-  COMPUTE_PROCESSOR_TYPES,
   cascadeLakeSkylakeBroadwellHaswell,
   cascadeLakeSkylake,
   cascadeLakeSkylakeBroadwell,
   cascadeLakeHaswell,
-} from '../../domain/ComputeProcessorTypes'
+  COMPUTE_PROCESSOR_TYPES,
+} from '@cloud-carbon-footprint/core'
 
 export const VIRTUAL_MACHINE_TYPE_VCPU_MAPPING: {
   [instanceType: string]: number
@@ -393,6 +393,11 @@ export const VIRTUAL_MACHINE_TYPE_VCPU_MAPPING: {
 export const INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING: {
   [series: string]: string[]
 } = {
+  'vCPU Duration': [COMPUTE_PROCESSOR_TYPES.UNKNOWN],
+  vCore: [COMPUTE_PROCESSOR_TYPES.UNKNOWN],
+  D3: [COMPUTE_PROCESSOR_TYPES.UNKNOWN],
+  S1: [COMPUTE_PROCESSOR_TYPES.UNKNOWN],
+  'P1 v2': [COMPUTE_PROCESSOR_TYPES.UNKNOWN],
   'A1 v2': [COMPUTE_PROCESSOR_TYPES.UNKNOWN],
   'A2 v2': [COMPUTE_PROCESSOR_TYPES.UNKNOWN],
   'A2m v2': [COMPUTE_PROCESSOR_TYPES.UNKNOWN],

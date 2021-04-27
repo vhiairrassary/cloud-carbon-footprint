@@ -22,13 +22,28 @@ jest.mock('@cloud-carbon-footprint/core', () => ({
   }),
 }))
 
+jest.mock('@cloud-carbon-footprint/azure', () => ({
+  ...jest.requireActual('@cloud-carbon-footprint/azure'),
+  AZURE_EMISSIONS_FACTORS_METRIC_TON_PER_KWH: {
+    azureRegion1: 5,
+    azureRegion2: 6,
+  },
+  App: jest.fn().mockImplementation(() => {
+    return {
+      getAzureConsumptionManagementData: mockGetAzureConsumptionManagementData,
+      getFilterData: mockGetFilterData,
+    }
+  }),
+}))
+
 import express from 'express'
-import api, { EmissionsRatios } from './api'
+import api, { EmissionsFactors } from './api'
 import request from 'supertest'
 import { EstimationResult } from '@cloud-carbon-footprint/core'
 
 const mockGetCostAndEstimates = jest.fn()
 const mockGetFilterData = jest.fn()
+const mockGetAzureConsumptionManagementData = jest.fn()
 
 describe('api', () => {
   let server: express.Express
@@ -46,7 +61,9 @@ describe('api', () => {
 
       const expectedResponse: EstimationResult[] = []
       mockGetCostAndEstimates.mockResolvedValueOnce(expectedResponse)
-
+      mockGetAzureConsumptionManagementData.mockResolvedValueOnce(
+        expectedResponse,
+      )
       //run
       const response = await request(server).get(
         encodeURI(`/footprint?start=${startDate}&end=${endDate}`),
@@ -111,7 +128,7 @@ describe('api', () => {
         encodeURI(`/regions/emissions-factors`),
       )
 
-      const expectedResponse: EmissionsRatios[] = [
+      const expectedResponse: EmissionsFactors[] = [
         {
           region: 'awsRegion1',
           mtPerKwHour: 1,
@@ -127,6 +144,14 @@ describe('api', () => {
         {
           region: 'gcpRegion2',
           mtPerKwHour: 4,
+        },
+        {
+          region: 'azureRegion1',
+          mtPerKwHour: 5,
+        },
+        {
+          region: 'azureRegion2',
+          mtPerKwHour: 6,
         },
       ]
 

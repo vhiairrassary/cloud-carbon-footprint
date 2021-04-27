@@ -203,7 +203,7 @@ export default class BillingExportTable {
     }
   }
 
-  private isUnknownUsage(usageRow: any): boolean {
+  private isUnknownUsage(usageRow: BillingExportRow): boolean {
     return (
       this.containsAny(UNKNOWN_USAGE_TYPES, usageRow.usageType) ||
       this.containsAny(UNKNOWN_SERVICE_TYPES, usageRow.serviceName) ||

@@ -6,4 +6,5 @@ import IUsageData from './IUsageData'
 
 export default interface StorageUsage extends IUsageData {
   readonly terabyteHours: number
+  readonly powerUsageEffectiveness?: number
 }

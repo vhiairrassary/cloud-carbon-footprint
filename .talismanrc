@@ -71,6 +71,20 @@ fileignoreconfig:
   checksum: 659170eb0cdaa9d06f8aeeddf76b5c2b4fb223642ee192ce6d0863b165838fad
 - filename: packages/api/estimates.cache.test.json
   checksum: cfc3b9636053ffd7d98c2456432cc08294b891bbf86c88af58cb8f105669aed2
+- filename: packages/azure/sonar-project.properties
+  checksum: d1780d974c36f01be1a1110a2bd3b77f5a49db032874ee86d1150458042b824d
+- filename: packages/azure/src/__tests__/AzureAccount.test.ts
+  checksum: 58dfed10d66307921ff15f22da20608061d5412cb2f0dcb6e36bd87fc6fc1ea7
+- filename: packages/azure/src/__tests__/AzureCredentialsProvider.test.ts
+  checksum: 3af804a305cba2a74a776f65833516e52cdd3badf5d29370e2411c64a4e5ca0d
+- filename: packages/azure/src/__tests__/ConsumptionManagement.test.ts
+  checksum: acd9032c84ccc23e372df876dcf99248a3b6a19f496119e7b15c0d9ff91ea99e
+- filename: packages/azure/src/application/AzureCredentialsProvider.ts
+  checksum: 9a92f8f741a855f453660583b53a1c4bd58e7579455f355a75e32943ede65d34
+- filename: packages/azure/src/lib/ConsumptionManagement.ts
+  checksum: 826b89d1506f4652f6958fb9a41e747b761ce8feb4ae9941cb56649119bf1b75
+- filename: packages/azure/test/fixtures/builders.ts
+  checksum: b22d97c87f30641f2d5dc302c4c92e3368f404c2ae14dab7cca080c7e9be211e
 - filename: packages/cli/.env.template
   checksum: 0f4239a7fcc646ee10374b1b69ddc413178663ea050610b95c91f15a677d41d9
 - filename: packages/client/create_client_env_file.sh
