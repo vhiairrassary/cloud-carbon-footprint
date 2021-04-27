@@ -24,9 +24,9 @@ import {
 } from '@cloud-carbon-footprint/core'
 
 import {
-  CLOUD_CONSTANTS,
+  AZURE_CLOUD_CONSTANTS,
   AZURE_EMISSIONS_FACTORS_METRIC_TON_PER_KWH,
-} from '../application/FootprintEstimationConstants'
+} from '../domain'
 import ConsumptionDetailRow from './ConsumptionDetailRow'
 import { INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING } from './VirtualMachineTypes'
 import {
@@ -416,7 +416,7 @@ export default class ConsumptionManagementService {
     const processors = INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING[usageType]
     if (!processors) {
       this.consumptionManagementLogger.warn(
-        `Error: No processors found for UsageType: ${usageType}`,
+        `No processors found for UsageType: ${usageType}`,
       )
       return []
     }
@@ -424,23 +424,23 @@ export default class ConsumptionManagementService {
   }
 
   private getMinwatts(computeProcessors: string[]): number {
-    return CLOUD_CONSTANTS.getMinWatts(computeProcessors)
+    return AZURE_CLOUD_CONSTANTS.getMinWatts(computeProcessors)
   }
 
   private getMaxwatts(computeProcessors: string[]): number {
-    return CLOUD_CONSTANTS.getMaxWatts(computeProcessors)
+    return AZURE_CLOUD_CONSTANTS.getMaxWatts(computeProcessors)
   }
 
   private getPowerUsageEffectiveness(region: string): number {
-    return CLOUD_CONSTANTS.getPUE(region)
+    return AZURE_CLOUD_CONSTANTS.getPUE(region)
   }
 
   private getNetworkingCoefficient(): number {
-    return CLOUD_CONSTANTS.NETWORKING_COEFFICIENT
+    return AZURE_CLOUD_CONSTANTS.NETWORKING_COEFFICIENT
   }
 
   private getCpuUtilizationAverage(): number {
-    return CLOUD_CONSTANTS.AVG_CPU_UTILIZATION_2020
+    return AZURE_CLOUD_CONSTANTS.AVG_CPU_UTILIZATION_2020
   }
 
   private getEmissionsFactors(): { [region: string]: number } {

@@ -13,7 +13,6 @@ import {
   Logger,
   RawRequest,
   reduceByTimestamp,
-  EstimationResult,
 } from '@cloud-carbon-footprint/core'
 
 import {
@@ -50,30 +49,19 @@ const FootprintApiMiddleware = async function (
   )
   const footprintApp = new App()
   const azureFootprintApp = new AzureApp()
-  let estimationResults: EstimationResult[]
-  let azureEstimationResults: EstimationResult[]
-  let estimationRequest
   try {
-    estimationRequest = CreateValidRequest(rawRequest)
-    try {
-      estimationResults = await footprintApp.getCostAndEstimates(
-        estimationRequest,
-      )
-    } catch {
-      apiLogger.warn(`Unable to process footprint request.`)
-    }
-    try {
-      azureEstimationResults = await azureFootprintApp.getAzureConsumptionManagementData(
-        estimationRequest,
-      )
-    } catch {
-      apiLogger.warn(`Unable to process azure footprint request.`)
-    }
+    const estimationRequest = CreateValidRequest(rawRequest)
+    const estimationResults = await footprintApp.getCostAndEstimates(
+      estimationRequest,
+    )
+    const azureEstimationResults = await azureFootprintApp.getAzureConsumptionManagementData(
+      estimationRequest,
+    )
     res.json(
       reduceByTimestamp(estimationResults.concat(azureEstimationResults)),
     )
   } catch (e) {
-    apiLogger.error(`Unable to create valid footprint request.`, e)
+    apiLogger.error(`Unable to process footprint request.`, e)
     if (e instanceof EstimationRequestValidationError) {
       res.status(400).send(e.message)
     } else if (e instanceof PartialDataError) {

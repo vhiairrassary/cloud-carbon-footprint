@@ -29,9 +29,9 @@ export default class ConsumptionDetailRow extends BillingDataRow {
   }
 
   private parseUsageType(): string {
-    if (this.usageType?.includes('Spot'))
-      return this.usageType?.replace(' Spot', '')
-    if (this.usageType?.includes('/')) return this.usageType?.split('/')[0]
+    if (this.usageType.includes('Spot'))
+      return this.usageType.replace(' Spot', '')
+    if (this.usageType.includes('/')) return this.usageType.split('/')[0]
     return this.usageType
   }
 }

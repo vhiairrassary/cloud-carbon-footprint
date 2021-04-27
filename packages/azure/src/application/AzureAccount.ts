@@ -16,10 +16,10 @@ import {
   ComputeEstimator,
   StorageEstimator,
   NetworkingEstimator,
-  CLOUD_CONSTANTS,
 } from '@cloud-carbon-footprint/core'
 import AzureCredentialsProvider from './AzureCredentialsProvider'
 import ConsumptionManagementService from '../lib/ConsumptionManagement'
+import { AZURE_CLOUD_CONSTANTS } from '../domain'
 
 export default class AzureAccount extends CloudProviderAccount {
   private credentials: ApplicationTokenCredentials | ServiceClientCredentials
@@ -49,8 +49,8 @@ export default class AzureAccount extends CloudProviderAccount {
         async (subscription: SubscriptionModels.Subscription) => {
           const consumptionManagementService = new ConsumptionManagementService(
             new ComputeEstimator(),
-            new StorageEstimator(CLOUD_CONSTANTS.AWS.SSDCOEFFICIENT),
-            new StorageEstimator(CLOUD_CONSTANTS.AWS.HDDCOEFFICIENT),
+            new StorageEstimator(AZURE_CLOUD_CONSTANTS.SSDCOEFFICIENT),
+            new StorageEstimator(AZURE_CLOUD_CONSTANTS.HDDCOEFFICIENT),
             new NetworkingEstimator(),
             new ConsumptionManagementClient(
               // eslint-disable-next-line

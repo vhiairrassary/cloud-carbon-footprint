@@ -10,7 +10,7 @@ import {
 } from '@cloud-carbon-footprint/core'
 import { AZURE_REGIONS } from '../lib/AzureRegions'
 
-export const CLOUD_CONSTANTS: CloudConstantsByProvider = {
+export const AZURE_CLOUD_CONSTANTS: CloudConstantsByProvider = {
   SSDCOEFFICIENT: 1.2, // watt hours / terabyte hour
   HDDCOEFFICIENT: 0.65, // watt hours / terabyte hour
   MIN_WATTS_AVG: 0.77,
@@ -28,7 +28,7 @@ export const CLOUD_CONSTANTS: CloudConstantsByProvider = {
   getMinWatts: (computeProcessors: string[]): number => {
     const minWattsForProcessors: number[] = computeProcessors.map(
       (processor: string) => {
-        return CLOUD_CONSTANTS.MIN_WATTS_BY_COMPUTE_PROCESSOR[processor]
+        return AZURE_CLOUD_CONSTANTS.MIN_WATTS_BY_COMPUTE_PROCESSOR[processor]
       },
     )
     const averageWattsForProcessors = getWattsByAverageOrMedian(
@@ -37,7 +37,7 @@ export const CLOUD_CONSTANTS: CloudConstantsByProvider = {
     )
     return averageWattsForProcessors
       ? averageWattsForProcessors
-      : CLOUD_CONSTANTS.MIN_WATTS_AVG
+      : AZURE_CLOUD_CONSTANTS.MIN_WATTS_AVG
   },
   MAX_WATTS_AVG: 3.74,
   MAX_WATTS_BY_COMPUTE_PROCESSOR: {
@@ -54,7 +54,7 @@ export const CLOUD_CONSTANTS: CloudConstantsByProvider = {
   getMaxWatts: (computeProcessors: string[]): number => {
     const maxWattsForProcessors: number[] = computeProcessors.map(
       (processor: string) => {
-        return CLOUD_CONSTANTS.MAX_WATTS_BY_COMPUTE_PROCESSOR[processor]
+        return AZURE_CLOUD_CONSTANTS.MAX_WATTS_BY_COMPUTE_PROCESSOR[processor]
       },
     )
     const averageWattsForProcessors = getWattsByAverageOrMedian(
@@ -63,12 +63,12 @@ export const CLOUD_CONSTANTS: CloudConstantsByProvider = {
     )
     return averageWattsForProcessors
       ? averageWattsForProcessors
-      : CLOUD_CONSTANTS.MAX_WATTS_AVG
+      : AZURE_CLOUD_CONSTANTS.MAX_WATTS_AVG
   },
   NETWORKING_COEFFICIENT: 0.001, // kWh / Gb
   PUE_AVG: 1.185,
   getPUE: (): number => {
-    return CLOUD_CONSTANTS.PUE_AVG
+    return AZURE_CLOUD_CONSTANTS.PUE_AVG
   },
   AVG_CPU_UTILIZATION_2020: 50,
 }
