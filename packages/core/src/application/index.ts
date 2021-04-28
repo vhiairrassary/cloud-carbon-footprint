@@ -11,6 +11,7 @@ export {
 export { default as CloudProviderAccount } from './CloudProviderAccount'
 export { default as configLoader } from './ConfigLoader'
 export { default as AWSAccount } from './AWSAccount'
+export { default as GCPAccount } from './GCPAccount'
 
 export * from './EstimationResult'
 export { EstimationRequest } from './CreateValidRequest'

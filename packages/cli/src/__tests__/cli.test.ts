@@ -74,6 +74,14 @@ jest.mock('../../../core/src/application/ConfigLoader', () => {
         NAME: 'GCP',
         CURRENT_REGIONS: ['us-east1'],
       },
+      AZURE: {
+        authentication: {
+          mode: 'GCP',
+          clientId: 'ccf-azure-client-id',
+          clientSecret: 'ccf-azure-client-secret',
+          tenantId: 'ccf-azure-tenant-id',
+        },
+      },
       LOGGING_MODE: 'test',
     }
   })

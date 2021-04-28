@@ -4,6 +4,7 @@
 
 import commander from 'commander'
 import { App, CreateValidRequest } from '@cloud-carbon-footprint/core'
+import { App as AzureApp } from '@cloud-carbon-footprint/azure'
 import * as process from 'process'
 import EmissionsByDayAndServiceTable from './EmissionsByDayAndServiceTable'
 import EmissionsByServiceTable from './EmissionsByServiceTable'
@@ -51,14 +52,20 @@ export default async function cli(argv: string[] = process.argv) {
   const estimationRequest = CreateValidRequest({ startDate, endDate, region })
   const { table, colWidths } = await new App()
     .getCostAndEstimates(estimationRequest)
-    .then((estimations) => {
-      if (groupBy === 'service') {
-        return EmissionsByServiceTable(estimations)
-      }
-      if (groupBy === 'day') {
-        return EmissionsByDayTable(estimations)
-      }
-      return EmissionsByDayAndServiceTable(estimations)
+    .then(async (estimations) => {
+      return await new AzureApp()
+        .getAzureConsumptionManagementData(estimationRequest)
+        .then((azureEstimations) => {
+          if (groupBy === 'service') {
+            return EmissionsByServiceTable(estimations.concat(azureEstimations))
+          }
+          if (groupBy === 'day') {
+            return EmissionsByDayTable(estimations)
+          }
+          return EmissionsByDayAndServiceTable(
+            estimations.concat(azureEstimations),
+          )
+        })
     })
 
   if (format === 'csv') {
