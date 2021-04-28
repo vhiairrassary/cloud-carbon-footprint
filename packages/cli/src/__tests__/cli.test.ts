@@ -29,7 +29,7 @@ import {
   mockAwsCostExplorerGetCostAndUsageResponse,
 } from '../../test/fixtures/awsMockFunctions'
 import { lambdaMockGetCostResponse } from '../../test/fixtures/costexplorer.fixtures'
-import config from '../../../core/src/application/ConfigLoader'
+import config from '@cloud-carbon-footprint/core/src/application/ConfigLoader'
 import {
   mockCpuUtilizationTimeSeries,
   mockVCPUTimeSeries,
@@ -53,7 +53,7 @@ jest.mock('@google-cloud/monitoring', () => {
   }
 })
 
-jest.mock('../../../core/src/application/ConfigLoader', () => {
+jest.mock('@cloud-carbon-footprint/core/src/application/ConfigLoader', () => {
   return jest.fn().mockImplementation(() => {
     return {
       AWS: {
@@ -88,7 +88,7 @@ jest.mock('../../../core/src/application/ConfigLoader', () => {
 })
 
 //disable cache
-jest.mock('../../../core/src/application/Cache')
+jest.mock('@cloud-carbon-footprint/core/src/application/Cache')
 
 beforeAll(() => {
   AWSMock.setSDKInstance(AWS)

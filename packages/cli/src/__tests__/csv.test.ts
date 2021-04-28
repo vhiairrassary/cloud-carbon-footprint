@@ -22,13 +22,13 @@ import {
 import cli from '../cli'
 import AWSMock from 'aws-sdk-mock'
 import AWS, { CloudWatch, CostExplorer, CloudWatchLogs } from 'aws-sdk'
-import config from '../../../core/src/application/ConfigLoader'
+import config from '@cloud-carbon-footprint/core/src/application/ConfigLoader'
 const getServices = jest.spyOn(AWSAccount.prototype, 'getServices')
 
 //disable cache
-jest.mock('../../../core/src/application/Cache')
+jest.mock('@cloud-carbon-footprint/core/src/application/Cache')
 
-jest.mock('../../../core/src/application/ConfigLoader', () => {
+jest.mock('@cloud-carbon-footprint/core/src/application/ConfigLoader', () => {
   return jest.fn().mockImplementation(() => {
     return {
       AWS: {
