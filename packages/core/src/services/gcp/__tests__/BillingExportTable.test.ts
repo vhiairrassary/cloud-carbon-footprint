@@ -48,7 +48,7 @@ describe('GCP BillingExportTable Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(CLOUD_CONSTANTS.GCP.SSDCOEFFICIENT),
       new StorageEstimator(CLOUD_CONSTANTS.GCP.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(CLOUD_CONSTANTS.GCP.NETWORKING_COEFFICIENT),
       new BigQuery(),
     )
 
@@ -88,7 +88,7 @@ describe('GCP BillingExportTable Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(CLOUD_CONSTANTS.GCP.SSDCOEFFICIENT),
       new StorageEstimator(CLOUD_CONSTANTS.GCP.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(CLOUD_CONSTANTS.GCP.NETWORKING_COEFFICIENT),
       new BigQuery(),
     )
 
@@ -153,7 +153,7 @@ describe('GCP BillingExportTable Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(CLOUD_CONSTANTS.GCP.SSDCOEFFICIENT),
       new StorageEstimator(CLOUD_CONSTANTS.GCP.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(CLOUD_CONSTANTS.GCP.NETWORKING_COEFFICIENT),
       new BigQuery(),
     )
 
@@ -218,7 +218,7 @@ describe('GCP BillingExportTable Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(CLOUD_CONSTANTS.GCP.SSDCOEFFICIENT),
       new StorageEstimator(CLOUD_CONSTANTS.GCP.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(CLOUD_CONSTANTS.GCP.NETWORKING_COEFFICIENT),
       new BigQuery(),
     )
 
@@ -242,7 +242,7 @@ describe('GCP BillingExportTable Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(CLOUD_CONSTANTS.GCP.SSDCOEFFICIENT),
       new StorageEstimator(CLOUD_CONSTANTS.GCP.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(CLOUD_CONSTANTS.GCP.NETWORKING_COEFFICIENT),
       new BigQuery(),
     )
 
@@ -280,7 +280,7 @@ describe('GCP BillingExportTable Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(CLOUD_CONSTANTS.GCP.SSDCOEFFICIENT),
       new StorageEstimator(CLOUD_CONSTANTS.GCP.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(CLOUD_CONSTANTS.GCP.NETWORKING_COEFFICIENT),
       new BigQuery(),
     )
 
@@ -326,7 +326,7 @@ describe('GCP BillingExportTable Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(CLOUD_CONSTANTS.GCP.SSDCOEFFICIENT),
       new StorageEstimator(CLOUD_CONSTANTS.GCP.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(CLOUD_CONSTANTS.GCP.NETWORKING_COEFFICIENT),
       new BigQuery(),
     )
 
@@ -380,7 +380,7 @@ describe('GCP BillingExportTable Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(CLOUD_CONSTANTS.GCP.SSDCOEFFICIENT),
       new StorageEstimator(CLOUD_CONSTANTS.GCP.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(CLOUD_CONSTANTS.GCP.NETWORKING_COEFFICIENT),
       new BigQuery(),
     )
 
@@ -406,7 +406,7 @@ describe('GCP BillingExportTable Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(CLOUD_CONSTANTS.GCP.SSDCOEFFICIENT),
       new StorageEstimator(CLOUD_CONSTANTS.GCP.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(CLOUD_CONSTANTS.GCP.NETWORKING_COEFFICIENT),
       new BigQuery(),
     )
 

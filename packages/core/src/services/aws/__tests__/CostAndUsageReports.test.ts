@@ -87,7 +87,7 @@ describe('CostAndUsageReports Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.SSDCOEFFICIENT),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(CLOUD_CONSTANTS.AWS.NETWORKING_COEFFICIENT),
       getServiceWrapper(),
     )
     const result = await athenaService.getEstimates(startDate, endDate)
@@ -216,7 +216,7 @@ describe('CostAndUsageReports Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.SSDCOEFFICIENT),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(CLOUD_CONSTANTS.AWS.NETWORKING_COEFFICIENT),
       getServiceWrapper(),
     )
     const result = await athenaService.getEstimates(startDate, endDate)
@@ -292,7 +292,7 @@ describe('CostAndUsageReports Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.SSDCOEFFICIENT),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(CLOUD_CONSTANTS.AWS.NETWORKING_COEFFICIENT),
       getServiceWrapper(),
     )
     const result = await athenaService.getEstimates(startDate, endDate)
@@ -343,7 +343,7 @@ describe('CostAndUsageReports Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.SSDCOEFFICIENT),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(CLOUD_CONSTANTS.AWS.NETWORKING_COEFFICIENT),
       getServiceWrapper(),
     )
     const result = await athenaService.getEstimates(startDate, endDate)
@@ -406,7 +406,7 @@ describe('CostAndUsageReports Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.SSDCOEFFICIENT),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(CLOUD_CONSTANTS.AWS.NETWORKING_COEFFICIENT),
       getServiceWrapper(),
     )
     const result = await athenaService.getEstimates(startDate, endDate)
@@ -464,7 +464,7 @@ describe('CostAndUsageReports Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.SSDCOEFFICIENT),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(CLOUD_CONSTANTS.AWS.NETWORKING_COEFFICIENT),
       getServiceWrapper(),
     )
     const result = await athenaService.getEstimates(startDate, endDate)
@@ -542,7 +542,7 @@ describe('CostAndUsageReports Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.SSDCOEFFICIENT),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(CLOUD_CONSTANTS.AWS.NETWORKING_COEFFICIENT),
       getServiceWrapper(),
     )
     const result = await athenaService.getEstimates(startDate, endDate)
@@ -608,7 +608,7 @@ describe('CostAndUsageReports Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.SSDCOEFFICIENT),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(CLOUD_CONSTANTS.AWS.NETWORKING_COEFFICIENT),
       getServiceWrapper(),
     )
     const result = await athenaService.getEstimates(startDate, endDate)
@@ -640,7 +640,7 @@ describe('CostAndUsageReports Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.SSDCOEFFICIENT),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(CLOUD_CONSTANTS.AWS.NETWORKING_COEFFICIENT),
       getServiceWrapper(),
     )
     await expect(() =>
@@ -656,7 +656,7 @@ describe('CostAndUsageReports Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.SSDCOEFFICIENT),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(CLOUD_CONSTANTS.AWS.NETWORKING_COEFFICIENT),
       getServiceWrapper(),
     )
     await expect(() =>

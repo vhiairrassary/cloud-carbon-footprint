@@ -21,6 +21,8 @@ import {
   NetworkingUsage,
   Logger,
   configLoader,
+  COMPUTE_PROCESSOR_TYPES,
+  CloudConstantsUsage,
 } from '@cloud-carbon-footprint/core'
 
 import {
@@ -196,10 +198,13 @@ export default class ConsumptionManagementService {
           cpuUtilizationAverage: this.getCpuUtilizationAverage(),
           numberOfvCpus: consumptionDetailRow.vCpuHours,
           usesAverageCPUConstant: true,
+          timestamp: consumptionDetailRow.timestamp,
+        }
+
+        const computeConstants: CloudConstantsUsage = {
           minWatts: this.getMinwatts(computeProcessors),
           maxWatts: this.getMaxwatts(computeProcessors),
           powerUsageEffectiveness: powerUsageEffectiveness,
-          timestamp: consumptionDetailRow.timestamp,
         }
 
         return this.computeEstimator.estimate(
@@ -208,6 +213,7 @@ export default class ConsumptionManagementService {
           'AZURE',
           computeProcessors,
           emissionsFactors,
+          computeConstants,
         )[0]
       case STORAGE_USAGE_UNITS.MONTH_1:
       case STORAGE_USAGE_UNITS.MONTH_100:
@@ -221,8 +227,12 @@ export default class ConsumptionManagementService {
         const storageUsage: StorageUsage = {
           timestamp: consumptionDetailRow.timestamp,
           terabyteHours: usageAmountTerabyteHours,
+        }
+
+        const storageConstants: CloudConstantsUsage = {
           powerUsageEffectiveness: powerUsageEffectiveness,
         }
+
         let estimate: FootprintEstimate
         if (this.isSSDStorage(consumptionDetailRow)) {
           estimate = this.ssdStorageEstimator.estimate(
@@ -230,6 +240,7 @@ export default class ConsumptionManagementService {
             consumptionDetailRow.region,
             'AZURE',
             emissionsFactors,
+            storageConstants,
           )[0]
         } else if (this.isHDDStorage(consumptionDetailRow)) {
           estimate = this.hddStorageEstimator.estimate(
@@ -237,6 +248,7 @@ export default class ConsumptionManagementService {
             consumptionDetailRow.region,
             'AZURE',
             emissionsFactors,
+            storageConstants,
           )[0]
         } else {
           this.consumptionManagementLogger.warn(
@@ -254,8 +266,10 @@ export default class ConsumptionManagementService {
           const networkingUsage: NetworkingUsage = {
             timestamp: consumptionDetailRow.timestamp,
             gigabytes: this.getGigabytesForNetworking(consumptionDetailRow),
+          }
+
+          const networkingConstants: CloudConstantsUsage = {
             powerUsageEffectiveness: powerUsageEffectiveness,
-            networkingCoefficient: this.getNetworkingCoefficient(),
           }
 
           const networkingEstimate = this.networkingEstimator.estimate(
@@ -263,6 +277,7 @@ export default class ConsumptionManagementService {
             consumptionDetailRow.region,
             'AZURE',
             emissionsFactors,
+            networkingConstants,
           )[0]
           if (networkingEstimate)
             networkingEstimate.usesAverageCPUConstant = false
@@ -413,14 +428,11 @@ export default class ConsumptionManagementService {
   }
 
   private getComputeProcessorsFromUsageType(usageType: string): string[] {
-    const processors = INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING[usageType]
-    if (!processors) {
-      this.consumptionManagementLogger.warn(
-        `No processors found for UsageType: ${usageType}`,
-      )
-      return []
-    }
-    return INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING[usageType]
+    return (
+      INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING[usageType] || [
+        COMPUTE_PROCESSOR_TYPES.UNKNOWN,
+      ]
+    )
   }
 
   private getMinwatts(computeProcessors: string[]): number {

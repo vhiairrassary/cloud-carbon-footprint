@@ -79,7 +79,7 @@ export default class AWSAccount extends CloudProviderAccount {
       new ComputeEstimator(),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.SSDCOEFFICIENT),
       new StorageEstimator(CLOUD_CONSTANTS.AWS.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(CLOUD_CONSTANTS.AWS.NETWORKING_COEFFICIENT),
       this.createServiceWrapper(
         this.getServiceConfigurationOptions(
           configLoader().AWS.ATHENA_REGION,

@@ -13,6 +13,7 @@ export { default as BillingDataRow } from './BillingDataRow'
 export { default as ComputeUsage } from './ComputeUsage'
 export { default as StorageUsage } from './StorageUsage'
 export { default as NetworkingUsage } from './NetworkingUsage'
+export { default as CloudConstantsUsage } from './CloudConstantsUsage'
 export {
   default as FootprintEstimate,
   appendOrAccumulateEstimatesByDay,

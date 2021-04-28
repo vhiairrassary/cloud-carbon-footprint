@@ -6,6 +6,7 @@ import FootprintEstimate from './FootprintEstimate'
 import IFootprintEstimator from './IFootprintEstimator'
 import StorageUsage from './StorageUsage'
 import { CLOUD_CONSTANTS, estimateCo2 } from './FootprintEstimationConstants'
+import CloudConstantsUsage from './CloudConstantsUsage'
 
 export class StorageEstimator implements IFootprintEstimator {
   coefficient: number
@@ -19,13 +20,14 @@ export class StorageEstimator implements IFootprintEstimator {
     region?: string,
     cloudProvider?: string,
     emissionsFactors?: { [region: string]: number },
+    constants?: CloudConstantsUsage,
   ): FootprintEstimate[] {
     return data.map((d: StorageUsage) => {
       const estimatedKilowattHours = this.estimateKilowattHours(
         d.terabyteHours,
         cloudProvider,
         region,
-        d.powerUsageEffectiveness,
+        constants?.powerUsageEffectiveness,
       )
 
       return {

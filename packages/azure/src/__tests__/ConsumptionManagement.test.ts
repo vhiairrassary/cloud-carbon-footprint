@@ -59,7 +59,7 @@ describe('Azure Consumption Management Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(AZURE_CLOUD_CONSTANTS.SSDCOEFFICIENT),
       new StorageEstimator(AZURE_CLOUD_CONSTANTS.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(AZURE_CLOUD_CONSTANTS.NETWORKING_COEFFICIENT),
       // eslint-disable-next-line
       // @ts-ignore: @azure/arm-consumption is using an older version of @azure/ms-rest-js, causing a type error.
       new ConsumptionManagementClient(mockCredentials, subscriptionId),
@@ -155,7 +155,7 @@ describe('Azure Consumption Management Service', () => {
         new ComputeEstimator(),
         new StorageEstimator(AZURE_CLOUD_CONSTANTS.SSDCOEFFICIENT),
         new StorageEstimator(AZURE_CLOUD_CONSTANTS.HDDCOEFFICIENT),
-        new NetworkingEstimator(),
+        new NetworkingEstimator(AZURE_CLOUD_CONSTANTS.NETWORKING_COEFFICIENT),
         // eslint-disable-next-line
         // @ts-ignore: @azure/arm-consumption is using an older version of @azure/ms-rest-js, causing a type error.
         new ConsumptionManagementClient(mockCredentials, subscriptionId),
@@ -236,7 +236,7 @@ describe('Azure Consumption Management Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(AZURE_CLOUD_CONSTANTS.SSDCOEFFICIENT),
       new StorageEstimator(AZURE_CLOUD_CONSTANTS.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(AZURE_CLOUD_CONSTANTS.NETWORKING_COEFFICIENT),
       // eslint-disable-next-line
       // @ts-ignore: @azure/arm-consumption is using an older version of @azure/ms-rest-js, causing a type error.
       new ConsumptionManagementClient(mockCredentials, subscriptionId),
@@ -335,7 +335,7 @@ describe('Azure Consumption Management Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(AZURE_CLOUD_CONSTANTS.SSDCOEFFICIENT),
       new StorageEstimator(AZURE_CLOUD_CONSTANTS.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(AZURE_CLOUD_CONSTANTS.NETWORKING_COEFFICIENT),
       // eslint-disable-next-line
       // @ts-ignore: @azure/arm-consumption is using an older version of @azure/ms-rest-js, causing a type error.
       new ConsumptionManagementClient(mockCredentials, subscriptionId),
@@ -385,7 +385,7 @@ describe('Azure Consumption Management Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(AZURE_CLOUD_CONSTANTS.SSDCOEFFICIENT),
       new StorageEstimator(AZURE_CLOUD_CONSTANTS.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(AZURE_CLOUD_CONSTANTS.NETWORKING_COEFFICIENT),
       // eslint-disable-next-line
       // @ts-ignore: @azure/arm-consumption is using an older version of @azure/ms-rest-js, causing a type error.
       new ConsumptionManagementClient(mockCredentials, subscriptionId),
@@ -410,7 +410,7 @@ describe('Azure Consumption Management Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(AZURE_CLOUD_CONSTANTS.SSDCOEFFICIENT),
       new StorageEstimator(AZURE_CLOUD_CONSTANTS.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(AZURE_CLOUD_CONSTANTS.NETWORKING_COEFFICIENT),
       // eslint-disable-next-line
       // @ts-ignore: @azure/arm-consumption is using an older version of @azure/ms-rest-js, causing a type error.
       new ConsumptionManagementClient(mockCredentials, subscriptionId),
@@ -461,7 +461,7 @@ describe('Azure Consumption Management Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(AZURE_CLOUD_CONSTANTS.SSDCOEFFICIENT),
       new StorageEstimator(AZURE_CLOUD_CONSTANTS.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(AZURE_CLOUD_CONSTANTS.NETWORKING_COEFFICIENT),
       // eslint-disable-next-line
       // @ts-ignore: @azure/arm-consumption is using an older version of @azure/ms-rest-js, causing a type error.
       new ConsumptionManagementClient(mockCredentials, subscriptionId),
@@ -500,7 +500,7 @@ describe('Azure Consumption Management Service', () => {
       new ComputeEstimator(),
       new StorageEstimator(AZURE_CLOUD_CONSTANTS.SSDCOEFFICIENT),
       new StorageEstimator(AZURE_CLOUD_CONSTANTS.HDDCOEFFICIENT),
-      new NetworkingEstimator(),
+      new NetworkingEstimator(AZURE_CLOUD_CONSTANTS.NETWORKING_COEFFICIENT),
       // eslint-disable-next-line
       // @ts-ignore: @azure/arm-consumption is using an older version of @azure/ms-rest-js, causing a type error.
       new ConsumptionManagementClient(mockCredentials, subscriptionId),

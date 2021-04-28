@@ -5,6 +5,7 @@
 import { AWS_REGIONS } from '../../services/aws/AWSRegions'
 import NetworkingEstimator from '../NetworkingEstimator'
 import { GCP_REGIONS } from '../../services/gcp/GCPRegions'
+import { CLOUD_CONSTANTS } from '../FootprintEstimationConstants'
 
 describe('NetworkingEstimator', () => {
   it('does estimates for AWS US East 1 region', () => {
@@ -15,11 +16,9 @@ describe('NetworkingEstimator', () => {
       },
     ]
 
-    const result = new NetworkingEstimator().estimate(
-      input,
-      AWS_REGIONS.US_EAST_1,
-      'AWS',
-    )
+    const result = new NetworkingEstimator(
+      CLOUD_CONSTANTS.AWS.NETWORKING_COEFFICIENT,
+    ).estimate(input, AWS_REGIONS.US_EAST_1, 'AWS')
 
     expect(result).toEqual([
       {
@@ -38,11 +37,9 @@ describe('NetworkingEstimator', () => {
       },
     ]
 
-    const result = new NetworkingEstimator().estimate(
-      input,
-      GCP_REGIONS.SOUTHAMERICA_EAST1,
-      'GCP',
-    )
+    const result = new NetworkingEstimator(
+      CLOUD_CONSTANTS.AWS.NETWORKING_COEFFICIENT,
+    ).estimate(input, GCP_REGIONS.SOUTHAMERICA_EAST1, 'GCP')
 
     expect(result).toEqual([
       {

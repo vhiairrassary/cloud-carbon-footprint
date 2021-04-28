@@ -51,7 +51,9 @@ export default class AzureAccount extends CloudProviderAccount {
             new ComputeEstimator(),
             new StorageEstimator(AZURE_CLOUD_CONSTANTS.SSDCOEFFICIENT),
             new StorageEstimator(AZURE_CLOUD_CONSTANTS.HDDCOEFFICIENT),
-            new NetworkingEstimator(),
+            new NetworkingEstimator(
+              AZURE_CLOUD_CONSTANTS.NETWORKING_COEFFICIENT,
+            ),
             new ConsumptionManagementClient(
               // eslint-disable-next-line
               // @ts-ignore: @azure/arm-consumption is using an older version of @azure/ms-rest-js, causing a type error.

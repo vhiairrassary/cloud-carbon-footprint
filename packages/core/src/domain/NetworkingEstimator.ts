@@ -6,21 +6,28 @@ import IFootprintEstimator from './IFootprintEstimator'
 import FootprintEstimate from './FootprintEstimate'
 import { CLOUD_CONSTANTS, estimateCo2 } from './FootprintEstimationConstants'
 import NetworkingUsage from './NetworkingUsage'
+import CloudConstantsUsage from './CloudConstantsUsage'
 
 export default class NetworkingEstimator implements IFootprintEstimator {
+  coefficient: number
+
+  constructor(coefficient: number) {
+    this.coefficient = coefficient
+  }
+
   estimate(
     data: NetworkingUsage[],
     region: string,
     cloudProvider: string,
     emissionsFactors?: { [region: string]: number },
+    constants?: CloudConstantsUsage,
   ): FootprintEstimate[] {
     return data.map((data: NetworkingUsage) => {
       const estimatedKilowattHours = this.estimateKilowattHours(
         data.gigabytes,
         cloudProvider,
         region,
-        data.powerUsageEffectiveness,
-        data.networkingCoefficient,
+        constants?.powerUsageEffectiveness,
       )
       const estimatedCO2Emissions = estimateCo2(
         estimatedKilowattHours,
@@ -40,20 +47,12 @@ export default class NetworkingEstimator implements IFootprintEstimator {
     cloudProvider: string,
     region: string,
     powerUsageEffectiveness: number,
-    networkingCoefficient: number,
   ) {
     // This function multiplies the usage amount in gigabytes by the networking coefficient, then the cloud provider PUE,
     // to get estimated kilowatt hours.
     const calculatedPowerUsageEffectiveness = powerUsageEffectiveness
       ? powerUsageEffectiveness
       : CLOUD_CONSTANTS[cloudProvider].getPUE(region)
-    const calculatedNetworkingCoefficient = networkingCoefficient
-      ? networkingCoefficient
-      : CLOUD_CONSTANTS[cloudProvider].NETWORKING_COEFFICIENT
-    return (
-      gigaBytes *
-      calculatedNetworkingCoefficient *
-      calculatedPowerUsageEffectiveness
-    )
+    return gigaBytes * this.coefficient * calculatedPowerUsageEffectiveness
   }
 }
