@@ -19,6 +19,7 @@ import {
   App as AzureApp,
   AZURE_EMISSIONS_FACTORS_METRIC_TON_PER_KWH,
 } from '@cloud-carbon-footprint/azure'
+import _ from 'lodash'
 
 export type EmissionsFactors = {
   region: string
@@ -57,9 +58,13 @@ const FootprintApiMiddleware = async function (
     const azureEstimationResults = await azureFootprintApp.getAzureConsumptionManagementData(
       estimationRequest,
     )
-    res.json(
-      reduceByTimestamp(estimationResults.concat(azureEstimationResults)),
-    )
+    if (_.isEqual(estimationResults, azureEstimationResults)) {
+      res.json(reduceByTimestamp(estimationResults))
+    } else {
+      res.json(
+        reduceByTimestamp(estimationResults.concat(azureEstimationResults)),
+      )
+    }
   } catch (e) {
     apiLogger.error(`Unable to process footprint request.`, e)
     if (e instanceof EstimationRequestValidationError) {

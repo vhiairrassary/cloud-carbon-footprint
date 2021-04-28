@@ -9,6 +9,7 @@ import moment from 'moment'
 
 export const cachePath = process.env.CCF_CACHE_PATH || 'estimates.cache.json'
 export const testCachePath = 'estimates.cache.test.json'
+const loadedCache = process.env.USE_TEST_CACHE ? testCachePath : cachePath
 
 export default class EstimatorCacheFileSystem implements EstimatorCache {
   getEstimates(): Promise<EstimationResult[]> {
@@ -19,7 +20,7 @@ export default class EstimatorCacheFileSystem implements EstimatorCache {
     const cachedEstimates = await this.loadEstimates()
 
     return fs.writeFile(
-      cachePath,
+      loadedCache,
       JSON.stringify(cachedEstimates.concat(estimates)),
       'utf8',
     )
@@ -27,7 +28,6 @@ export default class EstimatorCacheFileSystem implements EstimatorCache {
 
   private async loadEstimates(): Promise<EstimationResult[]> {
     let data = '[]'
-    const loadedCache = process.env.USE_TEST_CACHE ? testCachePath : cachePath
     try {
       data = await fs.readFile(loadedCache, 'utf8')
     } catch (error) {
@@ -36,7 +36,7 @@ export default class EstimatorCacheFileSystem implements EstimatorCache {
         '\n',
         'Creating new cache file...',
       )
-      await fs.writeFile(cachePath, '[]', 'utf8')
+      await fs.writeFile(loadedCache, '[]', 'utf8')
     }
     const dateTimeReviver = (key: string, value: string) => {
       if (key === 'timestamp') return moment.utc(value).toDate()
