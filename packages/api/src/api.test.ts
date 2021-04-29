@@ -28,12 +28,6 @@ jest.mock('@cloud-carbon-footprint/azure', () => ({
     azureRegion1: 5,
     azureRegion2: 6,
   },
-  App: jest.fn().mockImplementation(() => {
-    return {
-      getAzureConsumptionManagementData: mockGetAzureConsumptionManagementData,
-      getFilterData: mockGetFilterData,
-    }
-  }),
 }))
 
 import express from 'express'
@@ -43,7 +37,6 @@ import { EstimationResult } from '@cloud-carbon-footprint/core'
 
 const mockGetCostAndEstimates = jest.fn()
 const mockGetFilterData = jest.fn()
-const mockGetAzureConsumptionManagementData = jest.fn()
 
 describe('api', () => {
   let server: express.Express
@@ -61,9 +54,7 @@ describe('api', () => {
 
       const expectedResponse: EstimationResult[] = []
       mockGetCostAndEstimates.mockResolvedValueOnce(expectedResponse)
-      mockGetAzureConsumptionManagementData.mockResolvedValueOnce(
-        expectedResponse,
-      )
+
       //run
       const response = await request(server).get(
         encodeURI(`/footprint?start=${startDate}&end=${endDate}`),

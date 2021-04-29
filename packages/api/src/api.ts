@@ -5,21 +5,17 @@
 import express from 'express'
 
 import {
-  App,
   CreateValidRequest,
   EstimationRequestValidationError,
   PartialDataError,
   CLOUD_PROVIDER_EMISSIONS_FACTORS_METRIC_TON_PER_KWH,
   Logger,
   RawRequest,
-  reduceByTimestamp,
 } from '@cloud-carbon-footprint/core'
 
-import {
-  App as AzureApp,
-  AZURE_EMISSIONS_FACTORS_METRIC_TON_PER_KWH,
-} from '@cloud-carbon-footprint/azure'
-import _ from 'lodash'
+import { AZURE_EMISSIONS_FACTORS_METRIC_TON_PER_KWH } from '@cloud-carbon-footprint/azure'
+
+import App from './app'
 
 export type EmissionsFactors = {
   region: string
@@ -49,22 +45,12 @@ const FootprintApiMiddleware = async function (
     `Footprint API request started with Start Date: ${rawRequest.startDate} and End Date: ${rawRequest.endDate}`,
   )
   const footprintApp = new App()
-  const azureFootprintApp = new AzureApp()
   try {
     const estimationRequest = CreateValidRequest(rawRequest)
     const estimationResults = await footprintApp.getCostAndEstimates(
       estimationRequest,
     )
-    const azureEstimationResults = await azureFootprintApp.getAzureConsumptionManagementData(
-      estimationRequest,
-    )
-    if (_.isEqual(estimationResults, azureEstimationResults)) {
-      res.json(reduceByTimestamp(estimationResults))
-    } else {
-      res.json(
-        reduceByTimestamp(estimationResults.concat(azureEstimationResults)),
-      )
-    }
+    res.json(estimationResults)
   } catch (e) {
     apiLogger.error(`Unable to process footprint request.`, e)
     if (e instanceof EstimationRequestValidationError) {

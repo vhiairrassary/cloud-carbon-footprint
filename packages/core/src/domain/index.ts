@@ -26,3 +26,6 @@ export {
   cascadeLakeSkylakeBroadwell,
   cascadeLakeHaswell,
 } from './ComputeProcessorTypes'
+export { default as UsageData } from './IUsageData'
+export { default as ICloudService } from './ICloudService'
+export { default as Cost } from './Cost'
