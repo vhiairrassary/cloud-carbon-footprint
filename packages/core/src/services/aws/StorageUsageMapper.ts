@@ -7,7 +7,7 @@ import { CostExplorer } from 'aws-sdk'
 import StorageUsage from '../../domain/StorageUsage'
 import { CLOUD_CONSTANTS } from '../../domain/FootprintEstimationConstants'
 import FootprintEstimate from '../../domain/FootprintEstimate'
-import { StorageEstimator } from '../../domain/StorageEstimator'
+import StorageEstimator from '../../domain/StorageEstimator'
 import { ServiceWrapper } from './ServiceWrapper'
 
 export class VolumeUsage implements StorageUsage {

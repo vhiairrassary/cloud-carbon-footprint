@@ -13,7 +13,7 @@ import { ClientOptions } from 'google-gax'
 import BillingExportTable from '../services/gcp/BillingExportTable'
 import ComputeEstimator from '../domain/ComputeEstimator'
 import NetworkingEstimator from '../domain/NetworkingEstimator'
-import { StorageEstimator } from '../domain/StorageEstimator'
+import StorageEstimator from '../domain/StorageEstimator'
 import { CLOUD_CONSTANTS } from '../domain/FootprintEstimationConstants'
 import { BigQuery } from '@google-cloud/bigquery'
 

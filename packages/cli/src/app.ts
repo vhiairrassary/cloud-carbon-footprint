@@ -2,13 +2,20 @@
  * © 2021 ThoughtWorks, Inc.
  */
 
-import { EstimationRequest } from './CreateValidRequest'
-import AWSAccount from './AWSAccount'
-import configLoader from './ConfigLoader'
-import { EstimationResult } from './EstimationResult'
-import cache from './Cache'
-import GCPAccount from './GCPAccount'
-import FilterResult, { getAccounts } from './FilterResult'
+import {
+  EstimationRequest,
+  AWSAccount,
+  GCPAccount,
+  configLoader,
+  EstimationResult,
+  reduceByTimestamp,
+  cache,
+  FilterResult,
+  getAccounts,
+} from '@cloud-carbon-footprint/core'
+
+import { AzureAccount } from '@cloud-carbon-footprint/azure'
+
 export default class App {
   @cache()
   async getCostAndEstimates(
@@ -19,6 +26,7 @@ export default class App {
     const config = configLoader()
     const AWS = config.AWS
     const GCP = config.GCP
+    const AZURE = config.AZURE
 
     if (request.region) {
       const estimatesForAccounts: EstimationResult[][] = []
@@ -77,9 +85,23 @@ export default class App {
             .flat(),
         )
       }
-      return AWSEstimatesByRegion.flat()
-        .flat()
-        .concat(GCPEstimatesByRegion.flat())
+      const AzureEstimatesByRegion: EstimationResult[][] = []
+      if (AZURE?.USE_BILLING_DATA) {
+        const azureAccount = new AzureAccount()
+        await azureAccount.initializeAccount()
+        const estimates = await azureAccount.getDataFromConsumptionManagement(
+          startDate,
+          endDate,
+        )
+        AzureEstimatesByRegion.push(estimates)
+      }
+
+      return reduceByTimestamp(
+        AWSEstimatesByRegion.flat()
+          .flat()
+          .concat(GCPEstimatesByRegion.flat())
+          .concat(AzureEstimatesByRegion.flat()),
+      )
     }
   }
 

@@ -14,16 +14,12 @@ import {
   AWSAccount,
   GCPAccount,
 } from '@cloud-carbon-footprint/core'
-import App from './app'
+import App from '../app'
 
-const getServices = jest.spyOn(AWSAccount.prototype, 'getServices')
-const getGCPServices = jest.spyOn(GCPAccount.prototype, 'getServices')
-
-// jest.mock('../Cache')
-// jest.mock('../../services/Logger')
-// jest.mock('../ConfigLoader', () => {
 jest.mock('@cloud-carbon-footprint/core', () => ({
   ...jest.requireActual('@cloud-carbon-footprint/core'),
+  Logger: jest.fn(),
+  cache: jest.fn(),
   configLoader: jest.fn().mockImplementation(() => {
     return {
       AWS: {
@@ -53,6 +49,9 @@ jest.mock('@cloud-carbon-footprint/core', () => ({
     }
   }),
 }))
+
+const getServices = jest.spyOn(AWSAccount.prototype, 'getServices')
+const getGCPServices = jest.spyOn(GCPAccount.prototype, 'getServices')
 
 const testRegions = ['us-east-1', 'us-east-2']
 
@@ -393,11 +392,6 @@ describe('App', () => {
             region: testRegions[0],
             usesAverageCPUConstant: false,
           },
-        ],
-      },
-      {
-        timestamp: new Date(startDate),
-        serviceEstimates: [
           {
             cloudProvider: 'AWS',
             accountName: testAwsAccountName,
@@ -513,11 +507,6 @@ describe('App', () => {
             region: testRegions[0],
             usesAverageCPUConstant: false,
           },
-        ],
-      },
-      {
-        timestamp: new Date(startDate),
-        serviceEstimates: [
           {
             cloudProvider: 'AWS',
             accountName: testAwsAccountName,
@@ -622,11 +611,6 @@ describe('App', () => {
             region: 'us-east-1',
             usesAverageCPUConstant: false,
           },
-        ],
-      },
-      {
-        timestamp: new Date(startDate),
-        serviceEstimates: [
           {
             cloudProvider: 'AWS',
             accountName: testAwsAccountName,
@@ -637,11 +621,6 @@ describe('App', () => {
             region: 'us-east-2',
             usesAverageCPUConstant: false,
           },
-        ],
-      },
-      {
-        timestamp: new Date(startDate),
-        serviceEstimates: [
           {
             cloudProvider: 'GCP',
             accountName: testGcpAccountName,
@@ -652,11 +631,6 @@ describe('App', () => {
             region: 'us-east1',
             usesAverageCPUConstant: false,
           },
-        ],
-      },
-      {
-        timestamp: new Date(startDate),
-        serviceEstimates: [
           {
             cloudProvider: 'GCP',
             accountName: testGcpAccountName,
@@ -667,11 +641,6 @@ describe('App', () => {
             region: 'us-west1',
             usesAverageCPUConstant: false,
           },
-        ],
-      },
-      {
-        timestamp: new Date(startDate),
-        serviceEstimates: [
           {
             cloudProvider: 'GCP',
             accountName: testGcpAccountName,
@@ -682,11 +651,6 @@ describe('App', () => {
             region: 'us-central1',
             usesAverageCPUConstant: false,
           },
-        ],
-      },
-      {
-        timestamp: new Date(startDate),
-        serviceEstimates: [
           {
             accountName: 'test GCP account 2',
             cloudProvider: 'GCP',
@@ -697,11 +661,6 @@ describe('App', () => {
             usesAverageCPUConstant: false,
             kilowattHours: 4,
           },
-        ],
-      },
-      {
-        timestamp: new Date(startDate),
-        serviceEstimates: [
           {
             accountName: 'test GCP account 2',
             cloudProvider: 'GCP',
@@ -712,11 +671,6 @@ describe('App', () => {
             usesAverageCPUConstant: false,
             kilowattHours: 4,
           },
-        ],
-      },
-      {
-        timestamp: new Date(startDate),
-        serviceEstimates: [
           {
             accountName: 'test GCP account 2',
             cloudProvider: 'GCP',

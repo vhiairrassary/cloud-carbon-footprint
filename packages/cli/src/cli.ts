@@ -3,16 +3,16 @@
  */
 
 import commander from 'commander'
-import { App, CreateValidRequest } from '@cloud-carbon-footprint/core'
-import { App as AzureApp } from '@cloud-carbon-footprint/azure'
+import moment from 'moment'
+import path from 'path'
+import { CreateValidRequest } from '@cloud-carbon-footprint/core'
 import * as process from 'process'
 import EmissionsByDayAndServiceTable from './EmissionsByDayAndServiceTable'
 import EmissionsByServiceTable from './EmissionsByServiceTable'
 import EmissionsByDayTable from './EmissionsByDayTable'
 import CliPrompts from './CliPrompts'
 import { exportToCSV } from './CSV'
-import moment from 'moment'
-import path from 'path'
+import App from './app'
 
 export default async function cli(argv: string[] = process.argv) {
   const program = new commander.Command()
@@ -52,20 +52,14 @@ export default async function cli(argv: string[] = process.argv) {
   const estimationRequest = CreateValidRequest({ startDate, endDate, region })
   const { table, colWidths } = await new App()
     .getCostAndEstimates(estimationRequest)
-    .then(async (estimations) => {
-      return await new AzureApp()
-        .getAzureConsumptionManagementData(estimationRequest)
-        .then((azureEstimations) => {
-          if (groupBy === 'service') {
-            return EmissionsByServiceTable(estimations.concat(azureEstimations))
-          }
-          if (groupBy === 'day') {
-            return EmissionsByDayTable(estimations)
-          }
-          return EmissionsByDayAndServiceTable(
-            estimations.concat(azureEstimations),
-          )
-        })
+    .then((estimations: any) => {
+      if (groupBy === 'service') {
+        return EmissionsByServiceTable(estimations)
+      }
+      if (groupBy === 'day') {
+        return EmissionsByDayTable(estimations)
+      }
+      return EmissionsByDayAndServiceTable(estimations)
     })
 
   if (format === 'csv') {

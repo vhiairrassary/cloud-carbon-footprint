@@ -2,7 +2,7 @@
  * © 2021 ThoughtWorks, Inc.
  */
 
-import { StorageEstimator } from '../StorageEstimator'
+import StorageEstimator from '../StorageEstimator'
 import FootprintEstimate from '../FootprintEstimate'
 import { AWS_REGIONS } from '../../services/aws/AWSRegions'
 

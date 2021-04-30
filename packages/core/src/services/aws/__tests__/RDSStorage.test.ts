@@ -5,7 +5,7 @@
 import AWS, { CostExplorer, CloudWatchLogs, CloudWatch } from 'aws-sdk'
 import AWSMock from 'aws-sdk-mock'
 import RDSStorage from '../RDSStorage'
-import { StorageEstimator } from '../../../domain/StorageEstimator'
+import StorageEstimator from '../../../domain/StorageEstimator'
 import { CLOUD_CONSTANTS } from '../../../domain/FootprintEstimationConstants'
 
 import {

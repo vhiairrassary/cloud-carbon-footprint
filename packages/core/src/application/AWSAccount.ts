@@ -27,7 +27,7 @@ import Region from '../domain/Region'
 import CloudProviderAccount from './CloudProviderAccount'
 import CostAndUsageReports from '../services/aws/CostAndUsageReports'
 import ComputeEstimator from '../domain/ComputeEstimator'
-import { StorageEstimator } from '../domain/StorageEstimator'
+import StorageEstimator from '../domain/StorageEstimator'
 import NetworkingEstimator from '../domain/NetworkingEstimator'
 import { CLOUD_CONSTANTS } from '../domain/FootprintEstimationConstants'
 

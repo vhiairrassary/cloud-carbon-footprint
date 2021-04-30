@@ -7,7 +7,7 @@ export {
   US_NERC_REGIONS_EMISSIONS_FACTORS,
 } from './FootprintEstimationConstants'
 export { default as ComputeEstimator } from './ComputeEstimator'
-export { StorageEstimator } from './StorageEstimator'
+export { default as StorageEstimator } from './StorageEstimator'
 export { default as NetworkingEstimator } from './NetworkingEstimator'
 export { default as BillingDataRow } from './BillingDataRow'
 export { default as ComputeUsage } from './ComputeUsage'

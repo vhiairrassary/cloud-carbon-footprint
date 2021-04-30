@@ -4,7 +4,7 @@
 
 import ICloudService from './ICloudService'
 import FootprintEstimate from './FootprintEstimate'
-import { StorageEstimator } from './StorageEstimator'
+import StorageEstimator from './StorageEstimator'
 import StorageUsage from './StorageUsage'
 import IFootprintEstimator from './IFootprintEstimator'
 import { CLOUD_CONSTANTS } from './FootprintEstimationConstants'

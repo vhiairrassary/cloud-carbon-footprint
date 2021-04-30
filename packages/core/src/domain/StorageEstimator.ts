@@ -8,7 +8,7 @@ import StorageUsage from './StorageUsage'
 import { CLOUD_CONSTANTS, estimateCo2 } from './FootprintEstimationConstants'
 import CloudConstantsUsage from './CloudConstantsUsage'
 
-export class StorageEstimator implements IFootprintEstimator {
+export default class StorageEstimator implements IFootprintEstimator {
   coefficient: number
 
   constructor(coefficient: number) {

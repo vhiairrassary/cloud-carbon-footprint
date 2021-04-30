@@ -5,7 +5,7 @@
 import { HDDStorageService, SSDStorageService } from '../StorageService'
 import StorageUsage from '../StorageUsage'
 import FootprintEstimate from '../FootprintEstimate'
-import { StorageEstimator } from '../StorageEstimator'
+import StorageEstimator from '../StorageEstimator'
 import { CLOUD_CONSTANTS } from '../FootprintEstimationConstants'
 import { AWS_REGIONS } from '../../services/aws/AWSRegions'
 import Cost from '../Cost'

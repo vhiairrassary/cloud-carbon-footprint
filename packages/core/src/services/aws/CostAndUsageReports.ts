@@ -7,7 +7,7 @@ import FootprintEstimate, {
   MutableEstimationResult,
 } from '../../domain/FootprintEstimate'
 import ComputeEstimator from '../../domain/ComputeEstimator'
-import { StorageEstimator } from '../../domain/StorageEstimator'
+import StorageEstimator from '../../domain/StorageEstimator'
 import configLoader from '../../application/ConfigLoader'
 import {
   GetQueryExecutionInput,

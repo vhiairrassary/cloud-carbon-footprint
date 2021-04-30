@@ -6,7 +6,7 @@ import { BigQuery } from '@google-cloud/bigquery'
 
 import { EstimationResult } from '../../../application/EstimationResult'
 import ComputeEstimator from '../../../domain/ComputeEstimator'
-import { StorageEstimator } from '../../../domain/StorageEstimator'
+import StorageEstimator from '../../../domain/StorageEstimator'
 import NetworkingEstimator from '../../../domain/NetworkingEstimator'
 import { CLOUD_CONSTANTS } from '../../../domain/FootprintEstimationConstants'
 import BillingExportTable from '../BillingExportTable'

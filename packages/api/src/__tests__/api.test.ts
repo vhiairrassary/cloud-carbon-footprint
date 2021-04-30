@@ -2,6 +2,11 @@
  * © 2021 ThoughtWorks, Inc.
  */
 
+import express from 'express'
+import api, { EmissionsFactors } from '../api'
+import request from 'supertest'
+import { EstimationResult } from '@cloud-carbon-footprint/core'
+
 jest.mock('@cloud-carbon-footprint/core', () => ({
   ...jest.requireActual('@cloud-carbon-footprint/core'),
   CLOUD_PROVIDER_EMISSIONS_FACTORS_METRIC_TON_PER_KWH: {
@@ -14,12 +19,6 @@ jest.mock('@cloud-carbon-footprint/core', () => ({
       gcpRegion2: 4,
     },
   },
-  App: jest.fn().mockImplementation(() => {
-    return {
-      getCostAndEstimates: mockGetCostAndEstimates,
-      getFilterData: mockGetFilterData,
-    }
-  }),
 }))
 
 jest.mock('@cloud-carbon-footprint/azure', () => ({
@@ -30,10 +29,14 @@ jest.mock('@cloud-carbon-footprint/azure', () => ({
   },
 }))
 
-import express from 'express'
-import api, { EmissionsFactors } from './api'
-import request from 'supertest'
-import { EstimationResult } from '@cloud-carbon-footprint/core'
+jest.mock('../app', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      getCostAndEstimates: mockGetCostAndEstimates,
+      getFilterData: mockGetFilterData,
+    }
+  })
+})
 
 const mockGetCostAndEstimates = jest.fn()
 const mockGetFilterData = jest.fn()

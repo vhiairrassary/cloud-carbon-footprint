@@ -7,7 +7,7 @@ import { BigQuery, Job } from '@google-cloud/bigquery'
 
 import ComputeEstimator from '../../domain/ComputeEstimator'
 import StorageUsage from '../../domain/StorageUsage'
-import { StorageEstimator } from '../../domain/StorageEstimator'
+import StorageEstimator from '../../domain/StorageEstimator'
 import ComputeUsage from '../../domain/ComputeUsage'
 import NetworkingEstimator from '../../domain/NetworkingEstimator'
 import NetworkingUsage from '../../domain/NetworkingUsage'

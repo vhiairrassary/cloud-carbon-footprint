@@ -12,7 +12,7 @@ import AWS, {
 import CostAndUsageReports from '../CostAndUsageReports'
 import ComputeEstimator from '../../../domain/ComputeEstimator'
 import NetworkingEstimator from '../../../domain/NetworkingEstimator'
-import { StorageEstimator } from '../../../domain/StorageEstimator'
+import StorageEstimator from '../../../domain/StorageEstimator'
 import { CLOUD_CONSTANTS } from '../../../domain/FootprintEstimationConstants'
 import {
   GetQueryExecutionOutput,
