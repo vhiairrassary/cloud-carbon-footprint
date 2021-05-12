@@ -1,5 +1,21 @@
 # @cloud-carbon-footprint/core
 
+## 0.7.0
+
+### Minor Changes
+
+- 68365cbf: implements memory calculations for gcp
+- 8df5703b: implements memory calculations for azure
+- 3e2f876d: adds improvements to memory implementation for aws
+- 370c509d: implements memory calculations for aws
+
+### Patch Changes
+
+- b63d8a67: The default `aws-sdk` dependency was bumped to `"^2.890.0"`,
+- 3abe3dca: Adds support for AmazonNeptune storage service to AWS CostAndUSageReports
+- 29f48e7c: Bug Fixed: Cache file is written with empty API data
+- 7d523b59: adds default unknown processor types for azure and aws
+
 ## 0.6.1
 
 ### Patch Changes
